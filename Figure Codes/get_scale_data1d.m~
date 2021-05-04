@@ -1,0 +1,29 @@
+function [min_x,max_x]=get_scale_data_1b(rawdata,objects)
+
+% usage:
+% [min_mean_d,max_mean_d]=get_scale_from_rawdata(rawdata,groups);
+
+% get scale 
+objects_list=sort3(objects);
+max_x=-1000000;min_x=1000000;
+n_objects=length(objects_list);
+
+% From figure 1c
+for i=1:n_objects
+    curr_object=objects_list(i);
+    indices_in=find(objects==curr_object);
+    d=rawdata(indicies_in,t_indicies);
+    
+    n_indices_in=length(indices_in);
+    mean_d=mean(d);
+    std_d=std(d);
+    se_d=std_d/sqrt(n_indices_in);
+    
+    max_mean_d=max(mean_d+se_d);min_mean_d=min(mean_d-se_d);
+    if (max_mean_d>max_y) max_x=max_mean_d; end
+    if (min_mean_d<min_x) min_x=min_mean_d; end
+    %keyboard;
+end
+
+max_x=ceil(max_x/10)*10;
+min_x=floor(min_x/10)*10;
